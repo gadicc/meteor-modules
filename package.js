@@ -1,6 +1,6 @@
 Package.describe({
   name: 'gadicohen:modules',
-  version: '0.0.1',
+  version: '0.0.2',
   summary: 'Minimalist require support, with glslify hack.',
   git: 'https://github.com/gadicc/meteor-modules',
 });

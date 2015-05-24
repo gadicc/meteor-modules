@@ -6,7 +6,6 @@ var exec = Npm.require('sync-exec');
 var glslify_bin = path.join(
   process.cwd(), '.meteor', 'local', 'isopacks', 'gadicohen_modules',
   'plugin.modules.require.os', 'npm', 'modules.require', 'node_modules', '.bin', 'glslify');
-console.log(glslify_bin);
 //var glslify = Npm.require('glslify');  <-- in package.js to run in exec
 //var glslify_bundle = require('glslify-bundle');
 //var glslify_deps   = require('glslify-deps');
@@ -31,7 +30,8 @@ function dprocess(data, output, touched, cut) {
     else if (fs.existsSync(file+'.js'))
       file += '.js';
     else {
-      console.log('missing ' + file);
+      if (!file.match(/glslify/))
+        console.log('missing ' + file);
       return; // _each
     }
 
