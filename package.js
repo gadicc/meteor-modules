@@ -1,6 +1,6 @@
 Package.describe({
   name: 'gadicohen:modules',
-  version: '0.0.4', // used in plugin.js too (kinda :) - ask me)!
+  version: '0.0.5', // used in plugin.js too (kinda :) - ask me)!
   summary: 'Minimalist require support, with glslify hack.',
   git: 'https://github.com/gadicc/meteor-modules',
 });
@@ -10,7 +10,7 @@ Package.registerBuildPlugin({
   use: ['underscore'],
   npmDependencies: {
     "sync-exec": "0.5.0",
-    "glslify": "2.1.2"
+    "glslify": "1.6.0"
 //    "glslify-bundle": "2.0.3"
 //    "glslify-deps": "1.2.1"
   },

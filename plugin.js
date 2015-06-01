@@ -3,6 +3,7 @@ var path = Npm.require('path');
 var exec = Npm.require('sync-exec');
 
 // build plugins must be synchronous, gslify is async
+/*
 var glslify_bin, glslify_bins = [
   path.join( // try a local package first
     process.cwd(), '.meteor', 'local', 'isopacks', 'gadicohen_modules',
@@ -24,6 +25,8 @@ if (!glslify_bin) {
   console.warn('[modules] Couldn\'t figure out glslify path, won\'t build shaders');
   console.log(glslify_bins);
 }
+*/
+var glslify_bin = 'glslify';
 
 //var glslify = Npm.require('glslify');  <-- in package.js to run in exec
 //var glslify_bundle = require('glslify-bundle');
