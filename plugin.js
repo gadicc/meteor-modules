@@ -37,11 +37,11 @@ function dprocess(data, output, touched, cut) {
   while ((match = re.exec(data.contents)))
     requires.push(path.resolve(path.dirname(data.fullInputPath), match[2]));
 
-  match = data.contents.match(/glslify\((\{[\S\s]*\})\)/);
-  if (match) {
-    eval("match = " + match[1].replace(/\s*/, ' '));
-    glslify(match, data, output, touched, cut);
-  }
+  // match = data.contents.match(/glslify\((\{[\S\s]*\})\)/);
+  // if (match) {
+  //  eval("match = " + match[1].replace(/\s*/, ' '));
+  //  glslify(match, data, output, touched, cut);
+  // }
 
   _.each(requires, function(file) {
     if (touched[file]) return;
@@ -52,7 +52,7 @@ function dprocess(data, output, touched, cut) {
     else if (fs.existsSync(file+'.js'))
       file += '.js';
     else {
-      if (!file.match(/glslify/))
+      //if (!file.match(/glslify/))
         console.log('missing ' + file);
       return; // _each
     }
@@ -94,6 +94,7 @@ function handler(compileStep) {
   _.each(output, function(file) {
     //console.log(root, fileStats.name);
     var contents;
+    /*
     if (file.type === 'glsl') {
       contents = 'modules.export(' + JSON.stringify({
         name: file.module,
@@ -103,12 +104,15 @@ function handler(compileStep) {
         ).stdout
       }) + ');\n';
     } else {
+    */
       contents = '' +
         'var module = { name: ' + JSON.stringify(file.module) + ', exports: {} };\n' +
         'var require = Package.underscore._.partial(modules.require, module.name);\n' +
-         file.contents +
+         file.contents.replace(/glslify\((['"])(.+)\1\)/g, function() {
+          return glslify(arguments[2], file);
+         }) +
         'modules.export(module);\n';
-    }
+    //}
 
 //        if (file.module.match(/dom-render/))
 //    console.log(file.module, file.requires);
@@ -125,6 +129,8 @@ function handler(compileStep) {
 
 Plugin.registerSourceHandler('modules.require', handler);
 
+/*
+v1.6
 function glslify(glslData, data, output, touched, cut) {
   var key, sourceOnly, requires = [];
   for (key in glslData) {
@@ -142,10 +148,21 @@ function glslify(glslData, data, output, touched, cut) {
       type: 'glsl',
       fullInputPath: file,
       inputPath: file.substr(cut),
-      module: file.substr(cut), /*.replace(/\.js$/, ''), */
+      module: file.substr(cut), // .replace(/\.js$/, ''),
       //contents: fs.readFileSync(file).toString('utf-8')      
     };
 
     output.push(outData)
   });
+}
+*/
+
+// v2.1.2
+function glslify(file, data) {
+  return JSON.stringify(exec(
+    glslify_bin + ' ' + file,
+    { cwd: path.dirname(data.fullInputPath) }
+  ).stdout
+    .replace(/\/\*[\s\S]+?\*\//g, '') // remove comments
+    .replace(/\n(?:\s*\n){2,}/g, '\n\n'));     // remove superfluous newlines
 }
